@@ -1,20 +1,118 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
+<mat-horizontal-stepper #stepper>
+  <mat-step [completed]="step2" optional="false">
+    <ng-template matStepLabel>Upload the english translation</ng-template>
+    <mat-card>
+      <mat-card-content>
+        <input hidden type="file" #jsonUploader (change)="onSelect($event, stepper)" />
+        <button mat-raised-button color="primary" (click)="jsonUploader.click()">
+          <i class="material-icons" *ngIf="!uploading">file_upload</i>
+          <mat-spinner *ngIf="uploading"></mat-spinner>
+          Upload file
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Edit the Dataset</ng-template>
+    <mat-card *ngIf="nodes">
+      <mat-card-content>
+        <table style="width:100%">
+          <thead>
+            <tr>
+              <th colspan="4">
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="Find Translation" [ngModel]="filterText" (ngModelChange)="onFilter($event)" type="text" />
+                </mat-form-field>
+              </th>
+            </tr>
+          </thead>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Dutch</th>
+              <th>French</th>
+              <th>&nbsp;</th>
+            </tr>
+            <tr>
+              <th>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="Key" [(ngModel)]="newNode.key" type="text" />
+                </mat-form-field>
+              </th>
+              <th>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="English translation" [(ngModel)]="newNode.en" type="text" />
+                </mat-form-field>
+              </th>
+              <th>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="Dutch translation" [(ngModel)]="newNode.nl" type="text" />
+                </mat-form-field>
+              </th>
+              <th>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="French translation" [(ngModel)]="newNode.fr" type="text" />
+                </mat-form-field>
+              </th>
+              <th>
+                <button mat-mini-fab color="primary" (click)="addNode()">
+                  <i class="material-icons">add</i>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let node of filteredNodes">
+              <td>
+                {{node.key}}
+              </td>
+              <td>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="English translation" [(ngModel)]="node.en" type="text" />
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="Dutch translation" [(ngModel)]="node.nl" type="text" />
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="wide-form-field">
+                  <input matInput placeholder="French translation" [(ngModel)]="node.fr" type="text" />
+                </mat-form-field>
+              </td>
+              <td>
+                <button mat-mini-fab color="warn" (click)="removeNode(node.key)">
+                  <i class="material-icons">remove</i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Download your translations</ng-template>
+    <mat-card>
+      <mat-card-content>
+        <button mat-raised-button color="primary" (click)="crunch()">
+          <i class="material-icons" *ngIf="!crunching">file_upload</i>
+          <mat-spinner *ngIf="crunching"></mat-spinner>
+          Download file
+        </button>
+        <mat-list>
+          <mat-list-item *ngIf="result && result.en">
+            <a [href]="buildUri(result.en)" download="en-GB.json">English translation</a>
+          </mat-list-item>
+          <mat-list-item *ngIf="result && result.fr">
+            <a [href]="buildUri(result.fr)" download="fr-FR.json">French translation</a>
+          </mat-list-item>
+          <mat-list-item *ngIf="result && result.nl">
+            <a [href]="buildUri(result.nl)" download="nl-BE.json">Dutch translation</a>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+</mat-horizontal-stepper>
