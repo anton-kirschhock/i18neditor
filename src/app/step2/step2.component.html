@@ -1,0 +1,80 @@
+<mat-card>
+  <mat-card-header>
+    <h2>Edit your translation</h2>
+  </mat-card-header>
+  <mat-card-content>
+    <table style="width:100%">
+      <thead>
+        <tr>
+          <th colspan="4">
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="Find Translation" [ngModel]="filterText" (ngModelChange)="onFilter($event)" type="text" />
+            </mat-form-field>
+          </th>
+        </tr>
+      </thead>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Dutch</th>
+          <th>French</th>
+          <th>&nbsp;</th>
+        </tr>
+        <tr>
+          <th>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="Key" [(ngModel)]="newNode.key" type="text" />
+            </mat-form-field>
+          </th>
+          <th>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="English translation" [(ngModel)]="newNode.en" type="text" />
+            </mat-form-field>
+          </th>
+          <th>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="Dutch translation" [(ngModel)]="newNode.nl" type="text" />
+            </mat-form-field>
+          </th>
+          <th>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="French translation" [(ngModel)]="newNode.fr" type="text" />
+            </mat-form-field>
+          </th>
+          <th>
+            <button mat-mini-fab color="primary" (click)="addNode()">
+              <i class="material-icons">add</i>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let node of filteredNodes">
+          <td>
+            {{node.key}}
+          </td>
+          <td>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="English translation" [(ngModel)]="node.en" type="text" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="Dutch translation" [(ngModel)]="node.nl" type="text" />
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="wide-form-field">
+              <input matInput placeholder="French translation" [(ngModel)]="node.fr" type="text" />
+            </mat-form-field>
+          </td>
+          <td>
+            <button mat-mini-fab color="warn" (click)="removeNode(node.key)">
+              <i class="material-icons">remove</i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card-content>
+</mat-card>

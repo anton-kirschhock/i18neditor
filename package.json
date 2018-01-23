@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electronbuild":"ng build --base-href . && cp src/electron/* dist/",
+    "electronbuild": "ng build --base-href . && cp src/electron/* dist/",
     "electron": "npm run electronbuild && electron dist/"
   },
   "private": true,

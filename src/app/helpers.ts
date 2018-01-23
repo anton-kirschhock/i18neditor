@@ -33,23 +33,21 @@ export function setField(obj: any, field: string, value: string) {
   }
 }
 
-export function extractNodes(json: any): TranslationNode[] {
-  const res: TranslationNode[] = [];
+export function extractNodes(json: any, lang?: 'en' | 'fr' | 'nl'): { key: string; value: string }[] {
+  const res: { key: string; value: string }[] = [];
   if (json === undefined) {
     return res;
   }
 
   Object.keys(json).forEach(key => {
     if (typeof json[key] === 'string') {
-      res.push({ key: key, en: json[key], fr: json[key], nl: json[key] });
+      res.push({ key: key, value: json[key] });
     } else {
       const childs = extractNodes(json[key]);
-      childs.forEach((child: TranslationNode) =>
-        res.push(<TranslationNode>{
+      childs.forEach(child =>
+        res.push({
           key: `${key}.${child.key}`,
-          en: child.en,
-          nl: child.nl,
-          fr: child.fr
+          value: child.value
         })
       );
     }

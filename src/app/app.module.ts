@@ -17,9 +17,12 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app.component';
+import { Step1Component } from './step1/step1.component';
+import { Step2Component } from './step2/step2.component';
+import { Step3Component } from './step3/step3.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, Step1Component, Step2Component, Step3Component],
   imports: [
     BrowserModule,
     FormsModule,
@@ -32,7 +35,7 @@ import { AppComponent } from './app.component';
     MatStepperModule,
     MatGridListModule,
     MatInputModule,
-    MatListModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

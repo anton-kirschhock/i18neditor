@@ -1,2 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.wide-form-field {
+  width: 100%;
+}
+
+html > body{
+  background: #e4e4e4;
+}
+
+.no-top-margin{
+  margin-top:0em;
+}
+
+.success{
+  background-color: #3ab63a!important;
+}
