@@ -1,0 +1,5 @@
+{
+  "name"    : "kirschhock.i18neditor",
+  "version" : "0.0.1",
+  "main"    : "electron.js"
+}
