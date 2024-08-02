@@ -1,9 +1,14 @@
 <mat-card>
   <mat-card-header>
-    <h2>Edit your translation</h2>
+    <span class="card-with-action">
+      <h2>Edit</h2>
+      <button mat-flat-button color="success" (click)="openAddDialog()">
+        Add node
+      </button>
+    </span>
   </mat-card-header>
   <mat-card-content>
-    <mat-form-field class="half-form-field">
+    <mat-form-field class="w-half">
       <input
         matInput
         placeholder="Filter key"
@@ -14,134 +19,73 @@
       />
       <mat-hint>Enter to filter; Esc to clear filter</mat-hint>
     </mat-form-field>
-    <table style="width: 100%">
-      <tr>
-        <th>
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="Key"
-              [(ngModel)]="newNode.key"
-              type="text"
-            />
-          </mat-form-field>
-        </th>
-        <th>
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="English translation"
-              [(ngModel)]="newNode.en"
-              type="text"
-            />
-          </mat-form-field>
-        </th>
-        <th>
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="Dutch translation"
-              [(ngModel)]="newNode.nl"
-              type="text"
-            />
-          </mat-form-field>
-        </th>
-        <th>
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="French translation"
-              [(ngModel)]="newNode.fr"
-              type="text"
-            />
-          </mat-form-field>
-        </th>
-        <th>
-          <button mat-mini-fab color="primary" (click)="addNode()">
-            <i class="material-icons">add</i>
-          </button>
-        </th>
-      </tr>
-    </table>
-    <table mat-table [dataSource]="filteredNodes" class="mat-elevation-z8">
-      <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
 
-      <!-- Position Column -->
-      <ng-container matColumnDef="tag">
-        <th mat-header-cell *matHeaderCellDef>Key</th>
-        <th mat-header-cell>Test</th>
-        <td mat-cell *matCellDef="let element">{{ element.key }}</td>
-      </ng-container>
-
-      <!-- EN -->
-      <ng-container matColumnDef="en">
-        <th mat-header-cell *matHeaderCellDef>English</th>
-        <th mat-header-cell>Test</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="English translation"
-              [(ngModel)]="element.en"
-              type="text"
-            />
-          </mat-form-field>
-        </td>
-      </ng-container>
-
-      <!-- FR -->
-      <ng-container matColumnDef="fr">
-        <th mat-header-cell *matHeaderCellDef>French</th>
-        <th mat-header-cell>Test</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="French translation"
-              [(ngModel)]="element.fr"
-              type="text"
-            />
-          </mat-form-field>
-        </td>
-      </ng-container>
-
-      <!-- NL -->
-      <ng-container matColumnDef="nl">
-        <th mat-header-cell *matHeaderCellDef>Dutch</th>
-        <th mat-header-cell>Test</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-form-field class="wide-form-field">
-            <input
-              matInput
-              placeholder="Dutch translation"
-              [(ngModel)]="element.nl"
-              type="text"
-            />
-          </mat-form-field>
-        </td>
-      </ng-container>
-
-      <!-- Actions -->
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-        <th mat-header-cell>Test</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-mini-fab color="warn" (click)="removeNode(element.key)">
-            <i class="material-icons">remove</i>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr
-        mat-header-row
-        *matHeaderRowDef="['tag', 'en', 'fr', 'nl', 'action']"
-      ></tr>
-
-      <tr
-        mat-row
-        *matRowDef="let row; columns: ['tag', 'en', 'fr', 'nl', 'action']"
-      ></tr>
-    </table>
+    <cdk-virtual-scroll-viewport
+      [itemSize]="250 * languages.length"
+      class="mat-elevation-z8"
+      style="height: 80vh"
+    >
+      <div *cdkVirtualFor="let element of filteredNodes" class="example-item">
+        <div class="cell">
+          <div class="key">
+            <div>
+              {{ element.key }}
+            </div>
+            <div>
+              <button
+                mat-mini-fab
+                color="error"
+                (click)="removeNode(element.key)"
+              >
+                <i class="material-icons">remove</i>
+              </button>
+            </div>
+          </div>
+          <div class="content">
+            @for (lang of sort(languages); track $index) {
+            <mat-card class="w-full">
+              <mat-card-header>
+                <mat-card-title> {{ lang.toUpperCase() }} </mat-card-title>
+              </mat-card-header>
+              <mat-form-field class="w-full">
+                <textarea
+                  matInput
+                  placeholder="No {{ lang.toUpperCase }} translation yet"
+                  [(ngModel)]="element[lang]"
+                  type="text"
+                ></textarea>
+              </mat-form-field>
+            </mat-card>
+            }
+            <!-- <mat-card class="w-full">
+              <mat-card-header>
+                <mat-card-title> Dutch </mat-card-title>
+              </mat-card-header>
+              <mat-form-field class="w-full">
+                <textarea
+                  matInput
+                  placeholder="Dutch translation"
+                  [(ngModel)]="element.nl"
+                  type="text"
+                ></textarea>
+              </mat-form-field>
+            </mat-card>
+            <mat-card class="w-full">
+              <mat-card-header>
+                <mat-card-title> French </mat-card-title>
+              </mat-card-header>
+              <mat-form-field class="w-full">
+                <textarea
+                  matInput
+                  placeholder="French translation"
+                  [(ngModel)]="element.fr"
+                  type="text"
+                ></textarea>
+              </mat-form-field>
+            </mat-card> -->
+          </div>
+        </div>
+      </div>
+    </cdk-virtual-scroll-viewport>
   </mat-card-content>
 </mat-card>

@@ -3,96 +3,39 @@
     <h2>Upload your translations</h2>
   </mat-card-header>
   <mat-card-content>
-    <input
-      hidden
-      type="file"
-      #enJsonUploader
-      (change)="onSelect($event, 'en')"
-    />
-    <p>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="enJsonUploader.click()"
-        [ngClass]="{ success: uploadStatus.en }"
-      >
-        <i class="material-icons" *ngIf="!uploadStatus.en">file_upload</i>
-        <i class="material-icons" *ngIf="uploadStatus.en">check_circle</i>
-        Upload the English file
-      </button>
-    </p>
-    <p class="no-top-margin">
-      <small *ngIf="uploadData?.['en']">
-        {{ uploadData?.['en']!.fileName }} ({{ uploadData?.['en']!.fileSize
-
-
-
-        }}bytes)
-      </small>
-    </p>
-
-    <input
-      hidden
-      type="file"
-      #frJsonUploader
-      (change)="onSelect($event, 'fr')"
-    />
-    <p>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="frJsonUploader.click()"
-        [ngClass]="{ success: uploadStatus.fr }"
-      >
-        <i class="material-icons" *ngIf="!uploadStatus.fr">file_upload</i>
-        <i class="material-icons" *ngIf="uploadStatus.fr">check_circle</i>
-        Upload the French file
-      </button>
-    </p>
-    <p class="no-top-margin">
-      <small *ngIf="uploadData?.['fr']">
-        {{ uploadData?.['fr']?.fileName }} ({{ uploadData?.['fr']?.fileSize
-
-
-
-
-
-
-
-
-        }}bytes)
-      </small>
-    </p>
-
-    <input
-      hidden
-      type="file"
-      #nlJsonUploader
-      (change)="onSelect($event, 'nl')"
-    />
-    <p>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="nlJsonUploader.click()"
-        [ngClass]="{ success: uploadStatus.nl }"
-      >
-        <i class="material-icons" *ngIf="!uploadStatus.nl">file_upload</i>
-        <i class="material-icons" *ngIf="uploadStatus.nl">check_circle</i>
-        Upload the Dutch file
-      </button>
-    </p>
-    <p class="no-top-margin">
-      <small *ngIf="uploadData?.['nl']">
-        {{ uploadData?.['nl']?.fileName }} ({{ uploadData?.['nl']?.fileSize
-
-
-
-
-
-
-        }}bytes)
-      </small>
-    </p>
+    <div class="flex flex-direction-row justify-content-center gap-5">
+      @for (lang of supportedLanguages; track $index) {
+      <input hidden type="file" #uploader (change)="onSelect($event, lang)" />
+      <div>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="uploader.click()"
+          [ngClass]="{ success: uploadStatus[lang] }"
+        >
+          <span class="iconized-button">
+            @if(uploadStatus[lang]){
+            <i class="material-icons">check</i>
+            }@else{
+            <i class="material-icons">file_upload</i>
+            }
+            <span>Upload the {{ lang.toUpperCase() }} file</span>
+          </span>
+        </button>
+        @if(uploadData[lang] !== undefined && uploadData[lang]?.fileName !==
+        undefined){
+        <p class="no-top-margin text-center">
+          <small>
+            {{ uploadData[lang]!.fileName }} ({{ uploadData[lang]!.fileSize }}
+            bytes)
+          </small>
+        </p>
+        <p class="no-top-margin text-center">
+          <small> {{ nodeCounter(lang) }} nodes </small>
+        </p>
+        }
+      </div>
+      }
+    </div>
   </mat-card-content>
 </mat-card>

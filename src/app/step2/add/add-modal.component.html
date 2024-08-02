@@ -1,0 +1,30 @@
+<mat-dialog-content>
+  <h3>Add new key</h3>
+  <mat-form-field class="w-full">
+    <input
+      matInput
+      placeholder="Key"
+      required
+      [(ngModel)]="newNode.key"
+      type="text"
+    />
+  </mat-form-field>
+  @for (lang of languages; track $index) {
+  <mat-card class="w-full">
+    <mat-card-header>
+      <mat-card-title> {{ lang.toUpperCase() }} </mat-card-title>
+    </mat-card-header>
+    <mat-form-field class="w-full">
+      <textarea
+        matInput
+        placeholder="{{ lang.toUpperCase() }} translation"
+        [(ngModel)]="newNode[lang]"
+        type="text"
+      ></textarea>
+    </mat-form-field>
+  </mat-card>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button color="success" (click)="addNode()">Add</button>
+</mat-dialog-actions>

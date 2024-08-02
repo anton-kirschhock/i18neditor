@@ -1,8 +1,8 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslationNode, extractNodes } from '../helpers';
 export type Languages = 'en' | 'fr' | 'nl';
 export interface UploadData {
@@ -14,35 +14,28 @@ export interface UploadData {
   selector: 'app-step1',
   templateUrl: './step1.component.html',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, NgClass, NgIf],
+  imports: [MatCardModule, MatButtonModule, NgClass, MatSnackBarModule],
 })
 export class Step1Component implements OnInit {
   uploading = false;
-  uploadStatus = {
-    fr: false,
-    en: false,
-    nl: false,
-  };
+  readonly supportedLanguages: Languages[] = ['en', 'nl', 'fr'];
+  languages: Languages[] = [];
+  uploadStatus: Partial<Record<Languages, boolean>> = {};
 
-  uploadData: { [key: string]: UploadData | null } = {
-    fr: null,
-    nl: null,
-    en: null,
-  };
+  uploadData: Partial<Record<Languages, UploadData | null>> = {};
 
   nodes!: TranslationNode[];
 
-  @Output() completed: EventEmitter<TranslationNode[]> = new EventEmitter<
-    TranslationNode[]
-  >();
+  @Output() completed: EventEmitter<{
+    nodes: TranslationNode[];
+    languages: Languages[];
+  }> = new EventEmitter<{ nodes: TranslationNode[]; languages: Languages[] }>();
   constructor(private snackBar: MatSnackBar) {}
   ngOnInit() {}
 
   onSelect($event: any, lang: Languages = 'en') {
     this.uploading = true;
-    this.snackBar.open(`Reading ${lang} JSON file...`, undefined, {
-      duration: 5000,
-    });
+    this.snackBar.open(`Reading ${lang} JSON file...`);
     const reader: FileReader = new FileReader();
     const file = $event.target.files[0];
     console.log(file);
@@ -51,10 +44,9 @@ export class Step1Component implements OnInit {
       if (jsonString && jsonString.trim() !== '') {
         const json = JSON.parse(jsonString);
         extractNodes(json).forEach((node) => this.pushNode(node, lang));
-        this.snackBar.open('Finished with ' + lang, undefined, {
-          duration: 5000,
-        });
-        this.completed.next(this.nodes);
+        this.snackBar.open('Finished importing ' + lang);
+        this.languages.push(lang);
+        this.completed.next({ nodes: this.nodes, languages: this.languages });
         this.uploading = false;
         this.uploadStatus[lang] = true;
         this.uploadData[lang] = {
@@ -77,5 +69,9 @@ export class Step1Component implements OnInit {
       this.nodes.push(item);
     }
     item[lang] = node.value;
+  }
+
+  nodeCounter(lang: string): number {
+    return this.nodes?.filter((e: any) => e?.[lang] !== undefined).length;
   }
 }

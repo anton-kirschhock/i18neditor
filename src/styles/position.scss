@@ -1,0 +1,21 @@
+.w-full {
+  width: 100%;
+}
+
+.w-half {
+  width: 50%;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.m-1rem {
+  margin: 1rem;
+}
+
+@for $i from 1 through 10 {
+  .m-#{$i}rem {
+    margin: #{$i}rem;
+  }
+}

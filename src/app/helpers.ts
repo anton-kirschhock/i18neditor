@@ -1,8 +1,7 @@
-export interface TranslationNode {
+import { Languages } from './step1/step1.component';
+
+export interface TranslationNode extends Partial<Record<Languages, string>> {
   key: string;
-  en: string;
-  nl: string;
-  fr: string;
 }
 
 export function inflateNodes(data: TranslationNode[]): {
@@ -10,11 +9,17 @@ export function inflateNodes(data: TranslationNode[]): {
   fr: any;
   nl: any;
 } {
-  const res: { en: any; fr: any; nl: any } = { en: {}, fr: {}, nl: {} };
+  const res: Record<Languages, any> = { en: {}, fr: {}, nl: {} };
   data.forEach((item) => {
-    setField(res.en, item.key, item.en);
-    setField(res.nl, item.key, item.nl);
-    setField(res.fr, item.key, item.fr);
+    if (item.en !== undefined) {
+      setField(res.en, item.key, item['en']);
+    }
+    if (item.nl !== undefined) {
+      setField(res.nl, item.key, item['nl']);
+    }
+    if (item.fr !== undefined) {
+      setField(res.fr, item.key, item['fr']);
+    }
   });
   return res;
 }
@@ -38,7 +43,7 @@ export function setField(obj: any, field: string, value: string) {
 
 export function extractNodes(
   json: any,
-  lang?: 'en' | 'fr' | 'nl'
+  lang?: Languages
 ): { key: string; value: string }[] {
   const res: { key: string; value: string }[] = [];
   if (json === undefined) {

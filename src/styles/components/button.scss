@@ -1,0 +1,19 @@
+.mat-mdc-mini-fab.mat-error {
+  --mdc-fab-small-container-color: var(--app-error);
+  --mat-fab-small-foreground-color: var(--app-error-foreground);
+}
+
+.mat-mdc-mini-fab.mat-success {
+  --mdc-fab-small-container-color: var(--app-success);
+  --mat-fab-small-foreground-color: var(--app-success-foreground);
+}
+
+.mat-mdc-unelevated-button.mat-success {
+  --mdc-filled-button-label-text-color: var(--app-success-foreground);
+  --mdc-filled-button-container-color: var(--app-success);
+}
+
+.iconized-button {
+  display: flex;
+  gap: 1rem;
+}

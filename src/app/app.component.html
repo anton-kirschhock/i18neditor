@@ -1,18 +1,37 @@
 <mat-card>
-  <mat-card-content>
-    <div style="text-align: right">
-      <button mat-raised-button (click)="prev()" [disabled]="step === 1">
-        <i class="material-icons">arrow_back</i> Previous</button>
-      <button mat-raised-button color="primary" (click)="next()" [disabled]="step === 3">Next
-        <i class="material-icons">arrow_forward</i>
-      </button>
+  <mat-card-content class="flex">
+    <div class="flex justify-content-space-between align-items-center">
+      <div>
+        <h1 class="no-margin">i18n Editor</h1>
+        <small>By Anton Kirschhock</small>
+      </div>
+      <div>
+        <button mat-raised-button (click)="prev()" [disabled]="step === 1">
+          <i class="material-icons">arrow_back</i> Previous
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="next()"
+          [disabled]="step === 3 || nodes.length === 0"
+        >
+          Next
+          <i class="material-icons">arrow_forward</i>
+        </button>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
 
-<br/>
-
-<app-step1 *ngIf="step === 1" (completed)="nodes = $event;"></app-step1>
-<app-step2 *ngIf="step === 2" [nodes]="nodes"></app-step2>
-<app-step3 *ngIf="step === 3" [nodes]="nodes"></app-step3>
-
+<div class="m-2rem">
+  @if(step === 1){
+  <app-step1 (completed)="onUploaded($event)"></app-step1>
+  }
+  <!--  -->
+  @if(step === 2){
+  <app-step2 [nodes]="nodes" [languages]="languages"></app-step2>}
+  <!--  -->
+  @if(step ===3){
+  <app-step3 [nodes]="nodes" [languages]="languages"></app-step3>
+  }
+</div>
