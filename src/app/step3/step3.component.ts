@@ -25,9 +25,9 @@ export class Step3Component implements OnInit {
   @Input() languages: Languages[] = [];
   crunching = false;
   result?: {
-    en: string;
-    fr: string;
-    nl: string;
+    en_gb: string;
+    fr_be: string;
+    nl_be: string;
   };
 
   constructor(public snackBar: MatSnackBar, private sanitizer: DomSanitizer) {}
@@ -48,9 +48,9 @@ export class Step3Component implements OnInit {
     this.crunching = true;
     const res = inflateNodes(this.nodes);
     this.result = {
-      en: JSON.stringify(res.en, null, 2),
-      fr: JSON.stringify(res.fr, null, 2),
-      nl: JSON.stringify(res.nl, null, 2),
+      en_gb: JSON.stringify(res.en_gb, null, 2),
+      fr_be: JSON.stringify(res.fr_be, null, 2),
+      nl_be: JSON.stringify(res.nl_be, null, 2),
     };
     this.crunching = false;
   }

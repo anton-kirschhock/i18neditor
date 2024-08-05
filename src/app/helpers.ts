@@ -5,20 +5,20 @@ export interface TranslationNode extends Partial<Record<Languages, string>> {
 }
 
 export function inflateNodes(data: TranslationNode[]): {
-  en: any;
-  fr: any;
-  nl: any;
+  en_gb: any;
+  fr_be: any;
+  nl_be: any;
 } {
-  const res: Record<Languages, any> = { en: {}, fr: {}, nl: {} };
+  const res: Record<Languages, any> = { en_gb: {}, fr_be: {}, nl_be: {} };
   data.forEach((item) => {
-    if (item.en !== undefined) {
-      setField(res.en, item.key, item['en']);
+    if (item.en_gb !== undefined) {
+      setField(res.en_gb, item.key, item['en_gb']);
     }
-    if (item.nl !== undefined) {
-      setField(res.nl, item.key, item['nl']);
+    if (item.nl_be !== undefined) {
+      setField(res.nl_be, item.key, item['nl_be']);
     }
-    if (item.fr !== undefined) {
-      setField(res.fr, item.key, item['fr']);
+    if (item.fr_be !== undefined) {
+      setField(res.fr_be, item.key, item['fr_be']);
     }
   });
   return res;

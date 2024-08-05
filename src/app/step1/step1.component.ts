@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslationNode, extractNodes } from '../helpers';
-export type Languages = 'en' | 'fr' | 'nl';
+export type Languages = 'en_gb' | 'fr_be' | 'nl_be';
 export interface UploadData {
   fileName: string;
   fileSize: number;
@@ -18,7 +18,7 @@ export interface UploadData {
 })
 export class Step1Component implements OnInit {
   uploading = false;
-  readonly supportedLanguages: Languages[] = ['en', 'nl', 'fr'];
+  readonly supportedLanguages: Languages[] = ['en_gb', 'nl_be', 'fr_be'];
   languages: Languages[] = [];
   uploadStatus: Partial<Record<Languages, boolean>> = {};
 
@@ -33,7 +33,7 @@ export class Step1Component implements OnInit {
   constructor(private snackBar: MatSnackBar) {}
   ngOnInit() {}
 
-  onSelect($event: any, lang: Languages = 'en') {
+  onSelect($event: any, lang: Languages = 'en_gb') {
     this.uploading = true;
     this.snackBar.open(`Reading ${lang} JSON file...`);
     const reader: FileReader = new FileReader();
@@ -65,7 +65,7 @@ export class Step1Component implements OnInit {
 
     let item = this.nodes.find((i) => i.key === node.key);
     if (!item) {
-      item = { key: node.key, en: '', fr: '', nl: '' };
+      item = { key: node.key, en_gb: '', fr_be: '', nl_be: '' };
       this.nodes.push(item);
     }
     item[lang] = node.value;
