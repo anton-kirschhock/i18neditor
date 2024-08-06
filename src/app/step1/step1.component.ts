@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslationNode, extractNodes } from '../helpers';
-export type Languages = 'en_gb' | 'fr_be' | 'nl_be';
+export type Languages = 'en_gb' | 'fr_be' | 'nl_be' | 'nl_nl';
 export interface UploadData {
   fileName: string;
   fileSize: number;
@@ -18,7 +18,12 @@ export interface UploadData {
 })
 export class Step1Component implements OnInit {
   uploading = false;
-  readonly supportedLanguages: Languages[] = ['en_gb', 'nl_be', 'fr_be'];
+  readonly supportedLanguages: Languages[] = [
+    'en_gb',
+    'nl_be',
+    'fr_be',
+    'nl_nl',
+  ];
   languages: Languages[] = [];
   uploadStatus: Partial<Record<Languages, boolean>> = {};
 
@@ -65,7 +70,7 @@ export class Step1Component implements OnInit {
 
     let item = this.nodes.find((i) => i.key === node.key);
     if (!item) {
-      item = { key: node.key, en_gb: '', fr_be: '', nl_be: '' };
+      item = { key: node.key, en_gb: '', fr_be: '', nl_be: '', nl_nl: '' };
       this.nodes.push(item);
     }
     item[lang] = node.value;

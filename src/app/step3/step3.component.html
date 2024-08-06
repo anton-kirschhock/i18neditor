@@ -3,14 +3,18 @@
     <h2>Download your translations</h2>
   </mat-card-header>
   <mat-card-content>
+    @if(!crunching){
     <mat-list>
       @for (lang of languages; track $index) {
       <mat-list-item *ngIf="result && result[lang]">
-        <a [href]="buildUri(result![lang])" [download]="lang + '.json'"
+        <a [href]="buildUri(result[lang]!)" [download]="lang + '.json'"
           >{{ lang.toUpperCase() }} translation</a
         >
       </mat-list-item>
       }
     </mat-list>
+    }@else {
+    <p>Rendering translation files</p>
+    }
   </mat-card-content>
 </mat-card>

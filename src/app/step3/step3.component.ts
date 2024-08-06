@@ -24,11 +24,7 @@ export class Step3Component implements OnInit {
   @Input() nodes!: TranslationNode[];
   @Input() languages: Languages[] = [];
   crunching = false;
-  result?: {
-    en_gb: string;
-    fr_be: string;
-    nl_be: string;
-  };
+  result: Partial<Record<Languages, string>> = {};
 
   constructor(public snackBar: MatSnackBar, private sanitizer: DomSanitizer) {}
 
@@ -46,12 +42,17 @@ export class Step3Component implements OnInit {
 
   crunch() {
     this.crunching = true;
-    const res = inflateNodes(this.nodes);
-    this.result = {
-      en_gb: JSON.stringify(res.en_gb, null, 2),
-      fr_be: JSON.stringify(res.fr_be, null, 2),
-      nl_be: JSON.stringify(res.nl_be, null, 2),
-    };
+    const res = inflateNodes(this.nodes, this.languages);
+    console.log(res);
+    this.result = {};
+    Object.keys(res).forEach(
+      (key: string) =>
+        (this.result[key as Languages] = JSON.stringify(
+          res[key as Languages],
+          null,
+          2
+        ))
+    );
     this.crunching = false;
   }
 }
