@@ -28,4 +28,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/i18neditor # Change this to your Angular app's build output directory
+          publish_dir: ./dist/i18neditor/browser # Change this to your Angular app's build output directory
