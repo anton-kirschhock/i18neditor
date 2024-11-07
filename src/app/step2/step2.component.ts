@@ -1,9 +1,10 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -22,10 +23,10 @@ import { AddModalComponent } from './add/add-modal.component';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgForOf,
-    NgIf,
+    NgClass,
     MatTableModule,
     ScrollingModule,
+    MatCheckboxModule,
   ],
 })
 export class Step2Component implements OnInit {
@@ -33,6 +34,7 @@ export class Step2Component implements OnInit {
   @Input() languages: Languages[] = [];
   filteredNodes!: TranslationNode[];
   filterText = '';
+  showIncompleteNodes = false;
   constructor(private dialog: MatDialog) {}
   ngOnInit() {
     this.onFilter();
@@ -55,6 +57,22 @@ export class Step2Component implements OnInit {
     nodes.splice(indexToRemove, 1);
     this.nodes = [...nodes];
     this.onFilter();
+  }
+
+  showIncompleteNodesChange($event: boolean) {
+    this.showIncompleteNodes = $event;
+    if ($event) {
+      this.filteredNodes = this.nodes.filter(
+        (item) =>
+          item.key.toLowerCase().indexOf(this.filterText.toLowerCase()) !==
+            -1 &&
+          Object.keys(item).some(
+            (key) => key !== 'key' && (item as any)[key] === ''
+          )
+      );
+    } else {
+      this.onFilter();
+    }
   }
 
   openAddDialog() {

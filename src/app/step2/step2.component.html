@@ -8,23 +8,18 @@
     </span>
   </mat-card-header>
   <mat-card-content>
-    <mat-form-field class="w-half">
-      <input
-        matInput
-        placeholder="Filter key"
-        [(ngModel)]="filterText"
-        type="text"
-        (keydown.enter)="onFilter()"
-        (keydown.esc)="clearFilter()"
-      />
-      <mat-hint>Enter to filter; Esc to clear filter</mat-hint>
-    </mat-form-field>
+    <div>
+      <mat-form-field class="w-half">
+        <input matInput placeholder="Filter key" [(ngModel)]="filterText" type="text" (keydown.enter)="onFilter()"
+          (keydown.esc)="clearFilter()" />
+        <mat-hint>Enter to filter; Esc to clear filter</mat-hint>
+      </mat-form-field>
 
-    <cdk-virtual-scroll-viewport
-      [itemSize]="250 * languages.length"
-      class="mat-elevation-z8"
-      style="height: 80vh"
-    >
+      <mat-checkbox [ngModel]="showIncompleteNodes" (ngModelChange)="showIncompleteNodesChange($event)">Show incomplete
+        nodes</mat-checkbox>
+    </div>
+
+    <cdk-virtual-scroll-viewport [itemSize]="250 * languages.length" class="mat-elevation-z8" style="height: 80vh">
       <div *cdkVirtualFor="let element of filteredNodes" class="example-item">
         <div class="cell">
           <div class="key">
@@ -32,28 +27,23 @@
               {{ element.key }}
             </div>
             <div>
-              <button
-                mat-mini-fab
-                color="error"
-                (click)="removeNode(element.key)"
-              >
+              <button mat-mini-fab color="error" (click)="removeNode(element.key)">
                 <i class="material-icons">remove</i>
               </button>
+            </div>
+            <div>
+
             </div>
           </div>
           <div class="content">
             @for (lang of sort(languages); track $index) {
-            <mat-card class="w-full">
+            <mat-card class="w-full" [ngClass]="{'no-value-card': element[lang] === ''}">
               <mat-card-header>
                 <mat-card-title> {{ lang.toUpperCase() }} </mat-card-title>
               </mat-card-header>
               <mat-form-field class="w-full">
-                <textarea
-                  matInput
-                  placeholder="No {{ lang.toUpperCase }} translation yet"
-                  [(ngModel)]="element[lang]"
-                  type="text"
-                ></textarea>
+                <textarea matInput placeholder="No {{ lang.toUpperCase() }} translation yet" [(ngModel)]="element[lang]"
+                  type="text"></textarea>
               </mat-form-field>
             </mat-card>
             }

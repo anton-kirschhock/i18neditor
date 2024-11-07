@@ -1,4 +1,18 @@
-<mat-card>
+<mat-menu #fabMenu="matMenu">
+  @for (lang of allLanguages; track lang) {
+  @if (!supportedLanguages.includes(lang)) {
+  <button mat-menu-item (click)="addLanguage(lang)">
+    {{ lang.toUpperCase() }}
+  </button>
+  }
+  }
+</mat-menu>
+
+<mat-card (drop)="onDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" class="step1-card"
+  [ngClass]="{ 'drag-over': isDragOver }">
+  @if(isDragOver){
+  <p class="text-center">Drop your file here to upload!</p>
+  }@else{
   <mat-card-header>
     <h2>Upload your translations</h2>
   </mat-card-header>
@@ -7,12 +21,7 @@
       @for (lang of supportedLanguages; track $index) {
       <input hidden type="file" #uploader (change)="onSelect($event, lang)" />
       <div>
-        <button
-          mat-flat-button
-          color="primary"
-          (click)="uploader.click()"
-          [ngClass]="{ success: uploadStatus[lang] }"
-        >
+        <button mat-flat-button color="primary" (click)="uploader.click()" [ngClass]="{ success: uploadStatus[lang] }">
           <span class="iconized-button">
             @if(uploadStatus[lang]){
             <i class="material-icons">check</i>
@@ -36,6 +45,19 @@
         }
       </div>
       }
+      @if(supportedLanguages.length !== allLanguages.length){
+      <button mat-fab color="accent" [matMenuTriggerFor]="fabMenu">
+        <i class="material-icons">add</i>
+      </button>
+      }
+
+
+    </div>
+    <div>
+      <p class="text-center">
+        <small>You can also drag over a file.</small>
+      </p>
     </div>
   </mat-card-content>
+  }
 </mat-card>
