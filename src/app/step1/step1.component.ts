@@ -116,11 +116,14 @@ export class Step1Component implements OnInit {
 
     if (event && event.dataTransfer != null) {
       event.preventDefault();
-      const file = event.dataTransfer.files[0];
-      const lang = this.extractLanguageFromFilename(file.name);
-      if (lang) {
-        const reader: FileReader = new FileReader();
-        this.readFile(reader, file, lang);
+      const files = event.dataTransfer.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const lang = this.extractLanguageFromFilename(file.name);
+        if (lang) {
+          const reader: FileReader = new FileReader();
+          this.readFile(reader, file, lang);
+        }
       }
     }
   }
